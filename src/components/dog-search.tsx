@@ -17,10 +17,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-const DogSearch = () => {
+interface DogSearchProps {
+  value: string
+  onChange: (value: string) => void
+}
+
+const DogSearch = ({ value, onChange }: DogSearchProps) => {
   const { data: breeds } = useFetchListAllBreedsQuery()
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -44,7 +48,7 @@ const DogSearch = () => {
               <CommandItem
                 value="all"
                 onSelect={() => {
-                  setValue("")
+                  onChange("")
                   setOpen(false)
                 }}
               >
@@ -61,7 +65,7 @@ const DogSearch = () => {
                   key={breed}
                   value={breed}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
+                    onChange(currentValue === value ? "" : currentValue)
                     setOpen(false)
                   }}
                 >

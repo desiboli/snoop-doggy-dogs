@@ -1,22 +1,54 @@
-import { useFetchDogsQuery } from "@/store/dogs"
+import { useFetchDogsByBreedQuery, useFetchDogsQuery } from "@/store/dogs"
 import DogCard from "./dog-card"
 
-const DogList = () => {
-  const { data: dogs, isLoading, isError } = useFetchDogsQuery(100)
+interface DogListProps {
+  breed: string
+}
 
-  if (isLoading) return <div>Loading dogs...</div>
-  if (isError) return <div>Error loading dogs</div>
+const DogList = ({ breed }: DogListProps) => {
+  const {
+    data: dogs,
+    isLoading,
+    isError,
+  } = useFetchDogsQuery(100, {
+    skip: breed !== "",
+  })
+  const {
+    data: dogsByBreed,
+    isLoading: isLoadingByBreed,
+    isError: isErrorByBreed,
+  } = useFetchDogsByBreedQuery(
+    {
+      breed,
+      count: 100,
+    },
+    {
+      skip: breed === "",
+    }
+  )
+
+  if (isLoading || isLoadingByBreed) return <div>Loading dogs...</div>
+  if (isError || isErrorByBreed) return <div>Error loading dogs</div>
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {dogs?.map((dog) => (
-        <DogCard
-          key={dog.name}
-          name={dog.name}
-          photo={dog.photo}
-          breed={dog.breed}
-        />
-      ))}
+      {breed === ""
+        ? dogs?.map((dog, index) => (
+            <DogCard
+              key={index}
+              name={dog.name}
+              photo={dog.photo}
+              breed={dog.breed}
+            />
+          ))
+        : dogsByBreed?.map((dog, index) => (
+            <DogCard
+              key={index}
+              name={dog.name}
+              photo={dog.photo}
+              breed={dog.breed}
+            />
+          ))}
     </div>
   )
 }
