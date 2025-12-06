@@ -1,9 +1,28 @@
-import { useState } from "react"
+import { useCallback } from "react"
 import DogList from "./components/dog-list"
 import DogSearch from "./components/dog-search"
+import { useSearchParams } from "react-router"
 
 function App() {
-  const [selectedBreed, setSelectedBreed] = useState("")
+  const [searchParams, setSearchParams] = useSearchParams()
+  const selectedBreed = searchParams.get("breed") ?? ""
+
+  const handleBreedChange = useCallback(
+    (breed: string) => {
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev)
+
+        if (breed) {
+          newParams.set("breed", breed)
+        } else {
+          newParams.delete("breed")
+        }
+
+        return newParams
+      })
+    },
+    [setSearchParams]
+  )
 
   return (
     <>
@@ -14,7 +33,7 @@ function App() {
 
         <div className="mt-8 max-w-7xl mx-auto space-y-8">
           <div className="flex justify-end">
-            <DogSearch value={selectedBreed} onChange={setSelectedBreed} />
+            <DogSearch value={selectedBreed} onChange={handleBreedChange} />
           </div>
 
           <DogList breed={selectedBreed} />
