@@ -6,11 +6,16 @@ import { createBrowserRouter } from "react-router"
 import { RouterProvider } from "react-router/dom"
 import { Provider } from "react-redux"
 import { store } from "./store/store.ts"
+import DogPage from "./pages/dog-page.tsx"
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/dog",
+    element: <DogPage />,
   },
 ])
 

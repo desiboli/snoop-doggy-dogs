@@ -38,7 +38,7 @@ const DogList = ({ breed }: DogListProps) => {
   const allDogs = breed === "" ? dogs : dogsByBreed
   const displayedDogs = allDogs?.slice(0, visibleCount)
   const hasMore = allDogs ? visibleCount < allDogs.length : false
-
+  console.log(displayedDogs)
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
